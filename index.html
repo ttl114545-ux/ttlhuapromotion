@@ -835,7 +835,8 @@ function parseCSV(text) {
 
     const get = (key) => {
       const i = headers.indexOf(key);
-      return (i >= 0 && i < cols.length) ? cols[i].replace(/^"|"$/g, '').trim() : '';
+      if (i < 0 || i >= cols.length) return '';
+      return cols[i].replace(/^"+|"+$/g, '').replace(/\r/g,'').trim();
     };
     const getArr = (key) => get(key).split('|').map(s=>s.trim()).filter(Boolean);
 
