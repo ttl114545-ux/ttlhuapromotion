@@ -1183,13 +1183,17 @@ function getFiltered() {
 
 function cleanExpired() {
   const before = promos.length;
+  const expired = promos.filter(p => p.endDate && new Date(p.endDate) < new Date());
   promos = promos.filter(p => !p.endDate || new Date(p.endDate) >= new Date());
   const removed = before - promos.length;
   if (removed > 0) {
-    removedCount += removed;
-    localStorage.setItem('removedCount', removedCount);
-    saveAndRender();
-    showToast(`🗑 已自動隱藏 ${removed} 個到期活動`);
+    // 只計算非試算表來源的移除數（試算表資料每次重載都重新計算，不累加）
+    const localRemoved = expired.filter(p => !p.fromSheet).length;
+    if (localRemoved > 0) {
+      removedCount += localRemoved;
+      localStorage.setItem('removedCount', removedCount);
+    }
+    showToast('🗑 已自動隱藏 ' + removed + ' 個到期活動');
   }
 }
 
