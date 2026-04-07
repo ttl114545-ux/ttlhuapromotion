@@ -387,6 +387,89 @@
   .popup-hl-badge { display: inline-flex; align-items: center; gap: 5px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
   .popup-dm-btn { width: 100%; margin-top: 16px; padding: 11px 0; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); color: var(--text-sub); font-size: 13px; font-weight: 700; font-family: 'Noto Sans TC', sans-serif; cursor: pointer; transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 7px; }
   .popup-dm-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
+  /* ── MOBILE RESPONSIVE ─────────────────────────────────── */
+  .container { padding: 16px 12px 80px; }
+
+  @media (max-width: 600px) {
+    .container { padding: 12px 10px 100px; }
+    .logo-main { font-size: 18px; }
+    .logo-sub { font-size: 10px; }
+    .logo-icon { width: 34px; height: 34px; font-size: 16px; }
+    header { gap: 8px; margin-bottom: 12px; }
+
+    /* Tabs */
+    .page-tabs { gap: 6px; margin-bottom: 12px; }
+    .page-tab { font-size: 12px; padding: 9px 10px; }
+
+    /* Filter */
+    .filter-section { padding: 10px 12px; gap: 8px; }
+    .filter-label { font-size: 10px; }
+    .filter-chip { font-size: 11px; padding: 4px 10px; }
+
+    /* Cards */
+    .cards-grid { grid-template-columns: 1fr; gap: 12px; }
+    .card-body { padding: 14px 14px; }
+    .card-title { font-size: 15px; }
+    .promo-card { border-top-width: 4px; }
+
+    /* Channel */
+    .channel-section { margin-bottom: 20px; }
+    .channel-name { font-size: 14px; }
+
+    /* Info box */
+    .info-box { padding: 10px 12px; }
+    .period-text { font-size: 12px; }
+    .countdown { font-size: 11px; }
+
+    /* Tags */
+    .tag { font-size: 10px; padding: 2px 7px; }
+
+    /* Highlights */
+    .hl-item { font-size: 12px; padding: 7px 10px; }
+    .hl-main-title { font-size: 10px; }
+    .hl-section-badge { font-size: 10px; }
+
+    /* Edit panel */
+    .edit-field-input { font-size: 13px; }
+    .card-edit-panel { padding: 12px; }
+
+    /* Buttons */
+    .icon-btn, .icon-btn-edit { width: 28px; height: 28px; font-size: 12px; }
+    .dm-btn { font-size: 11px; padding: 4px 8px; }
+
+    /* Export button */
+    button[onclick="exportToFileAndLINE()"] {
+      bottom: 16px; right: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    /* Popup */
+    .popup-card { width: 96vw; max-height: 92vh; }
+    .popup-body { padding: 16px 16px 20px; }
+    .popup-title { font-size: 16px; }
+
+    /* Month/Gantt */
+    .gantt-th-label, .gantt-td-label { min-width: 130px; width: 130px; padding: 10px 10px; }
+    .gantt-row-title { font-size: 12px; }
+    .gantt-th-day, .gantt-td-day { min-width: 28px; width: 28px; }
+    .gantt-th-day-num { font-size: 11px; }
+    .gantt-th-day-dow { font-size: 9px; }
+    .month-legend { gap: 10px; }
+
+    /* Admin panel */
+    .input-body { flex-direction: column; }
+    .input-controls { min-width: unset; flex-direction: row; }
+    .btn { font-size: 12px; padding: 8px 12px; }
+  }
+
+  @media (max-width: 400px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .filter-section { flex-direction: column; align-items: flex-start; }
+    .gantt-th-label, .gantt-td-label { min-width: 100px; width: 100px; }
+  }
+
 </style>
 </head>
 <body>
@@ -426,7 +509,7 @@
         <div class="logo-sub">PROMO BOARD · 到期自動移除</div>
       </div>
     </div>
-    <div class="stats-bar">
+    <div class="stats-bar" style="display:none;">
       <div class="stat-pill">
         <div class="stat-num" id="totalCount">0</div>
         <div class="stat-label">活動總數</div>
