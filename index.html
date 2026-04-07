@@ -856,7 +856,7 @@ function parseCSV(text) {
       createdAt: new Date().toISOString(),
       fromSheet: true
     };
-  }).filter(p => p.title);
+  }).filter(p => p && p.title);
 }
 
 function loadFromSheet() {
