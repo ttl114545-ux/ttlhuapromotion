@@ -617,7 +617,7 @@
   <div class="page-tabs" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
     <button class="page-tab active" id="tab-board" onclick="switchTab('board')">📋 活動總覽</button>
     <button class="page-tab" id="tab-month" onclick="switchTab('month')">📅 活動行事曆</button>
-    <button onclick="(function(){var p=document.getElementById('sheetGuidePanel');p.style.display=p.style.display==='none'?'block':'none';})()" style="margin-left:auto;padding:6px 14px;border-radius:20px;border:1.5px solid #10b981;background:#f0fdf8;color:#065f46;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">📊 試算表欄位說明</button>
+
   </div>
 
   <div class="filter-section">
@@ -1556,13 +1556,21 @@ function renderCard(p) {
           <input class="edit-field-input" id="ef-title-${p.id}" type="text" value="${titleDisplay.replace(/"/g,'&quot;')}">
         </div>
         <div class="edit-field-group">
-          <div class="edit-field-label">品項分類</div>
-          <select class="edit-field-input" id="ef-product-${p.id}" style="cursor:pointer;">
-            <option value="beer"   ${p.products[0]==='beer'  ?'selected':''}>🍺 啤酒</option>
-            <option value="spirit" ${p.products[0]==='spirit'?'selected':''}>🍷 烈酒</option>
-            <option value="cig"    ${p.products[0]==='cig'   ?'selected':''}>🚬 菸</option>
-            <option value="noodle" ${p.products[0]==='noodle'?'selected':''}>🍜 泡麵</option>
-            <option value="other"  ${p.products[0]==='other' ?'selected':''}>🔵 其他</option>
+          <div class="edit-field-label">通路分類（可複選，按住 Ctrl/Cmd 點選）</div>
+          <select class="edit-field-input" id="ef-channel-${p.id}" multiple style="cursor:pointer;height:72px;">
+            <option value="traditional" ${p.channels.includes('traditional')?'selected':''}>傳統通路</option>
+            <option value="special"     ${p.channels.includes('special')    ?'selected':''}>特販通路</option>
+            <option value="bulk"        ${p.channels.includes('bulk')       ?'selected':''}>量販通路</option>
+          </select>
+        </div>
+        <div class="edit-field-group">
+          <div class="edit-field-label">品項分類（可複選，按住 Ctrl/Cmd 點選）</div>
+          <select class="edit-field-input" id="ef-product-${p.id}" multiple style="cursor:pointer;height:104px;">
+            <option value="beer"   ${p.products.includes('beer')  ?'selected':''}>🍺 啤酒</option>
+            <option value="spirit" ${p.products.includes('spirit')?'selected':''}>🍷 烈酒</option>
+            <option value="cig"    ${p.products.includes('cig')   ?'selected':''}>🚬 菸</option>
+            <option value="noodle" ${p.products.includes('noodle')?'selected':''}>🍜 泡麵</option>
+            <option value="other"  ${p.products.includes('other') ?'selected':''}>🔵 其他</option>
           </select>
         </div>
         <div class="edit-field-group">
@@ -1634,10 +1642,12 @@ function confirmSave(id) {
   if (!p) return;
 
   const g = (elId) => { const el = document.getElementById(elId); return el ? el.value.trim() : null; };
+  const getMulti = (elId) => { const el = document.getElementById(elId); if (!el) return null; const vals = Array.from(el.selectedOptions).map(o => o.value); return vals.length ? vals : null; };
   const lines = (elId) => { const v = g(elId); return v ? v.split('\n').map(l=>l.trim()).filter(Boolean) : null; };
 
   const newTitle    = g(`ef-title-${id}`);
-  const newProduct  = g(`ef-product-${id}`);
+  const newProducts = getMulti(`ef-product-${id}`);
+  const newChannels = getMulti(`ef-channel-${id}`);
   const newPeriod   = g(`ef-period-${id}`);
   const newTarget   = g(`ef-target-${id}`);
   
@@ -1661,7 +1671,8 @@ function confirmSave(id) {
   newConsumer = cleanEdited(newConsumer);
 
   if (newTitle    !== null) p.title = newTitle;
-  if (newProduct  !== null) { p.products = [newProduct]; }
+  if (newProducts !== null) { p.products = newProducts; }
+  if (newChannels !== null) { p.channels = newChannels; }
   if (newPeriod   !== null) p.periodOverride = newPeriod;
   if (newTarget   !== null) p.target = newTarget;
   if (newItems    !== null) { p.itemsList = newItems; p.items = newItems.join('。'); }
