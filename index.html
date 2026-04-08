@@ -225,6 +225,19 @@
   .row-text.text-sm { font-size: 12px; line-height: 1.55; }
   .row-text.text-xs { font-size: 11px; line-height: 1.5; }
 
+  /* 卡片文字整體縮放 */
+  .card-text-sm .row-text { font-size: 12px; line-height: 1.55; }
+  .card-text-sm .row-item { padding: 8px 12px; margin-bottom: 6px; }
+  .card-text-sm .card-title { font-size: 15px; }
+  .card-text-sm .period-text { font-size: 12px; }
+  .card-text-xs .row-text { font-size: 11px; line-height: 1.5; }
+  .card-text-xs .row-item { padding: 6px 10px; margin-bottom: 4px; }
+  .card-text-xs .row-num { width: 19px; height: 19px; font-size: 10px; }
+  .card-text-xs .card-title { font-size: 14px; }
+  .card-text-xs .period-text { font-size: 11.5px; }
+  .card-text-xs .hl-badge { font-size: 11px; padding: 4px 9px; }
+  .card-text-xs .highlights-wrap { padding: 12px 14px; }
+
   /* 促銷重點灰色大外框 */
   .highlights-wrap { background: #f1f5f9; border-radius: 12px; padding: 16px 18px; margin-top: 18px; }
   .hl-main-title { font-size: 13.5px; color: var(--accent); font-weight: 900; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px; }
@@ -1527,7 +1540,19 @@ function renderCard(p) {
 
   let highlightContent = '';
   if (p.highlights && p.highlights.length && !p.promoMethods && !p.bonuses && !p.consumerActivities) {
-    highlightContent += sectionItems('💰', '進貨折扣', p.highlights);
+    // 自動分類 highlights 陣列中每一條的類型
+    const autoPromo = [], autoBonus = [], autoConsumer = [], autoOther = [];
+    p.highlights.forEach(item => {
+      const t = item || '';
+      if (/促銷方式|活動方式|優惠內容|進貨優惠|進貨折扣/.test(t)) autoPromo.push(item);
+      else if (/加碼獎勵|大購額加碼獎勵|事後折讓/.test(t)) autoBonus.push(item);
+      else if (/消費者活動|消費者促銷|消費者加碼|消費者方案|消費者搭贈活動/.test(t)) autoConsumer.push(item);
+      else autoOther.push(item);
+    });
+    if (autoPromo.length) highlightContent += sectionItems('💰', '進貨折扣', autoPromo);
+    if (autoBonus.length) highlightContent += sectionItems('🎁', '大購額加碼獎勵', autoBonus);
+    if (autoConsumer.length) highlightContent += sectionItems('🛒', '消費者活動', autoConsumer);
+    if (autoOther.length) highlightContent += sectionItems('💰', '進貨折扣', autoOther);
   } else {
     highlightContent += sectionItems('💰', '進貨折扣', p.promoMethods);
     highlightContent += sectionItems('🎁', '大購額加碼獎勵', p.bonuses);
@@ -1549,7 +1574,19 @@ function renderCard(p) {
   const bonusEditVal  = (p.bonuses || []).map(formatBulletItem).join('\n');
   const consumerEditVal = (p.consumerActivities || []).map(formatBulletItem).join('\n');
 
-  return `<div class="promo-card ${cardCls} ${isExpired?'expired':''}" id="card-${p.id}">
+
+  // 計算卡片總文字量，動態縮放字體
+  const totalTextLen = [
+    ...(p.itemsList || []),
+    ...(p.promoMethods || []),
+    ...(p.bonuses || []),
+    ...(p.consumerActivities || []),
+    ...(p.highlights || [])
+  ].join('').length;
+  const cardFontScale = totalTextLen > 600 ? 'card-text-xs'
+                      : totalTextLen > 300 ? 'card-text-sm'
+                      : '';
+  return `<div class="promo-card ${cardCls} ${cardFontScale} ${isExpired?'expired':''}" id="card-${p.id}">
     <div class="card-body">
 
       <div class="card-header-row">
@@ -1820,7 +1857,15 @@ function exportToFileAndLINE() {
 
   let textContent = "📊 促案活動整理匯出\n" + "=".repeat(30) + "\n\n";
 
-  promos.forEach((p, index) => {
+  // 依最早截止日排序（無期限排最後）
+  const sortedPromos = [...promos].sort((a, b) => {
+    if (!a.endDate && !b.endDate) return 0;
+    if (!a.endDate) return 1;
+    if (!b.endDate) return -1;
+    return new Date(a.endDate) - new Date(b.endDate);
+  });
+
+  sortedPromos.forEach((p, index) => {
     const cleanItem = (i) => i.replace(/^\d{1,2}(?:[、]|\.(?!\d))\s*/, '').trim();
 
     let period = p.periodOverride || (() => {
