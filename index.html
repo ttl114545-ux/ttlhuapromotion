@@ -869,7 +869,8 @@ function renderMonth() {
 
   // ── rows ──
   const rows = relevant.map(p => {
-    const pStart = p.startDate ? new Date(p.startDate) : null;
+    const today0 = new Date(); today0.setHours(0,0,0,0);
+    const pStart = p.startDate ? new Date(p.startDate) : (p.startDateText ? today0 : null);
     const pEnd   = p.endDate   ? new Date(p.endDate)   : null;
     const prodKey = p.products[0] || 'other';
     const pm = PRODUCT_MAP[prodKey] || PRODUCT_MAP.other;
@@ -886,8 +887,8 @@ function renderMonth() {
     }).join('、');
 
     const periodText = p.periodOverride || (() => {
-      const s = p.startDate ? formatDate(p.startDate) : '';
-      const e = p.endDate   ? formatDate(p.endDate)   : '';
+      const s = p.startDate ? formatDate(p.startDate) : (p.startDateText || '');
+      const e = p.endDate   ? formatDate(p.endDate)   : (p.endDateText || '');
       if (s && e) return `${s} ～ ${e}`;
       if (!s && e) return `即日起至 ${e}`;
       if (s && !e) return `${s} 起`;
@@ -977,8 +978,8 @@ function openPromoPopup(id) {
   }).join('、');
 
   const periodText = p.periodOverride || (() => {
-    const s = p.startDate ? formatDate(p.startDate) : '';
-    const e = p.endDate   ? formatDate(p.endDate)   : '';
+    const s = p.startDate ? formatDate(p.startDate) : (p.startDateText || '');
+    const e = p.endDate   ? formatDate(p.endDate)   : (p.endDateText || '');
     if (s && e) return `${s} ～ ${e}`;
     if (!s && e) return `即日起至 ${e}`;
     if (s && !e) return `${s} 起`;
@@ -1124,6 +1125,8 @@ function parseCSV(text) {
       products,
       startDate: parseSheetDate(get('startDate')),
       endDate: parseSheetDate(get('endDate')),
+      startDateText: (!parseSheetDate(get('startDate')) && get('startDate')) ? get('startDate') : null,
+      endDateText:   (!parseSheetDate(get('endDate'))   && get('endDate'))   ? get('endDate')   : null,
       periodOverride: get('periodOverride') || null,
       target: get('target'),
       itemsList: getArr('itemsList'),
@@ -1575,8 +1578,8 @@ function renderCard(p) {
   const tagHtml = p.products.map(prod => { const pm = PRODUCT_MAP[prod]||PRODUCT_MAP.other; return `<span class="tag ${pm.cls}">${pm.label}</span>`; }).join('');
   
   const periodText = p.periodOverride || (() => {
-    const s = p.startDate ? formatDate(p.startDate) : '';
-    const e = p.endDate ? formatDate(p.endDate) : '';
+    const s = p.startDate ? formatDate(p.startDate) : (p.startDateText || '');
+    const e = p.endDate ? formatDate(p.endDate) : (p.endDateText || '');
     if (s && e) return `${s} ～ ${e}`;
     if (!s && e) return `即日起至${e}止`;
     if (s && !e) return `${s} 起`;
