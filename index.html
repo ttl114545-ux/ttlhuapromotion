@@ -152,166 +152,98 @@
   .channel-line { flex: 1; height: 1px; background: var(--border); }
   .channel-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); background: var(--surface2); padding: 3px 10px; border-radius: 20px; }
 
-  /* ── CARDS ─────────────────────────────────────────────── */
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(390px, 1fr)); gap: 18px; }
-
-  .promo-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    overflow: hidden;
-    transition: box-shadow 0.22s, transform 0.22s;
-    animation: cardIn 0.35s ease both;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  /* ── CARDS (REDESIGNED) ───────────────────────────────────────────────── */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
+  
+  .promo-card { 
+    background: var(--surface); 
+    border: 1px solid var(--border); 
+    border-radius: var(--radius); 
+    overflow: hidden; 
+    transition: all 0.22s; 
+    animation: cardIn 0.35s ease both; 
+    box-shadow: var(--shadow-sm); 
+    border-top: 5px solid transparent; /* controlled by product category */
   }
-  @keyframes cardIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
-  .promo-card:hover { box-shadow: 0 10px 28px rgba(0,0,0,0.1); transform: translateY(-2px); }
-  .promo-card.expired { opacity: 0.38; filter: grayscale(0.85); pointer-events: none; }
+  @keyframes cardIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .promo-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .promo-card.expired { opacity: 0.4; filter: grayscale(0.8); pointer-events: none; }
 
-  /* ── 卡片頂部彩色條 ── */
-  .card-stripe {
-    height: 6px;
-    width: 100%;
-    flex-shrink: 0;
-  }
-  .product-beer  .card-stripe { background: linear-gradient(90deg, var(--beer), #fbbf24); }
-  .product-spirit .card-stripe { background: linear-gradient(90deg, var(--spirit), #a78bfa); }
-  .product-cig   .card-stripe { background: linear-gradient(90deg, var(--cig), #fb923c); }
-  .product-noodle .card-stripe { background: linear-gradient(90deg, var(--noodle), #34d399); }
-  .product-other  .card-stripe { background: linear-gradient(90deg, var(--other), #60a5fa); }
+  /* 品項顏色 Border Top */
+  .product-beer { border-top-color: var(--beer); }
+  .product-spirit { border-top-color: var(--spirit); }
+  .product-cig { border-top-color: var(--cig); }
+  .product-noodle { border-top-color: var(--noodle); }
+  .product-other { border-top-color: var(--other); }
 
-  /* ── 卡片主體 ── */
-  .card-body { padding: 18px 20px 20px; }
+  .card-body { padding: 20px 22px; }
 
-  /* ── 標題區 ── */
-  .card-header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
-  .card-title { font-size: 16px; font-weight: 900; line-height: 1.45; color: var(--text); flex: 1; letter-spacing: 0.2px; overflow-wrap: anywhere; word-break: break-word; }
-  .card-btns { display: flex; gap: 6px; align-items: center; flex-shrink: 0; margin-top: 1px; }
-
+  /* 標題與標籤列 */
+  .card-header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .card-title { font-size: 17px; font-weight: 900; line-height: 1.4; color: var(--text); flex: 1; letter-spacing: 0.3px; overflow-wrap: anywhere; word-break: break-word; }
+  .card-btns { display: flex; gap: 6px; align-items: center; flex-shrink: 0; margin-top: 2px; }
+  
   .icon-btn { width: 30px; height: 30px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.18s; }
   .icon-btn:hover { border-color: #ef4444; color: #ef4444; background: #fff5f5; }
   .icon-btn-edit { width: 30px; height: 30px; border: 1px solid var(--accent); border-radius: 8px; background: var(--accent-light); color: var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.18s; }
   .icon-btn-edit:hover, .icon-btn-edit.active { background: var(--accent); color: #fff; }
-  .dm-btn { height: 28px; padding: 0 10px; font-size: 11.5px; border-radius: 7px; display: flex; align-items: center; gap: 5px; white-space: nowrap; font-weight: 700; cursor: pointer; border: 1.5px solid var(--accent); background: var(--accent-light); color: var(--accent); transition: all 0.18s; }
-  .dm-btn:hover { background: var(--accent); color: #fff; }
+  .dm-btn { height: 30px; padding: 0 12px; font-size: 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; white-space: nowrap; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text-sub); transition: all 0.18s; }
+  .dm-btn:hover { background: var(--border); color: var(--text); }
 
-  /* 品項 tags */
-  .tags-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; }
-  .tag { font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px; }
-  .tag-beer   { background: var(--beer-bg);   color: var(--beer); }
+  .tags-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tag { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 0.6px; }
+  .tag-beer { background: var(--beer-bg); color: var(--beer); }
   .tag-spirit { background: var(--spirit-bg); color: var(--spirit); }
-  .tag-cig    { background: var(--cig-bg);    color: var(--cig); }
+  .tag-cig { background: var(--cig-bg); color: var(--cig); }
   .tag-noodle { background: var(--noodle-bg); color: var(--noodle); }
-  .tag-other  { background: var(--other-bg);  color: var(--other); }
+  .tag-other { background: var(--other-bg); color: var(--other); }
 
-  /* ── 資訊列（日期 / 對象） ── */
-  .card-meta-zone {
-    background: #f8fafc;
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-bottom: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    border: 1px solid #edf0f7;
-  }
-  .meta-row { display: flex; align-items: center; gap: 8px; }
-  .meta-icon { font-size: 14px; flex-shrink: 0; line-height: 1; }
-  .meta-label { font-size: 10.5px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.6px; margin-right: 2px; }
-  .meta-val { font-size: 13px; color: var(--text-sub); font-weight: 500; }
-  .period-text { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text-sub); font-weight: 500; }
-  .countdown { font-family: 'DM Mono', monospace; font-size: 10.5px; padding: 3px 9px; border-radius: 20px; font-weight: 700; white-space: nowrap; margin-left: auto; }
+  /* 共用資訊外框 (日期 / 對象) */
+  .info-box { background: #f8fafc; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .info-box.outlined { background: #fff; border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 16px; }
+  .flex-between { justify-content: space-between; width: 100%; }
+  
+  .period-text { font-family: 'DM Mono', monospace; font-size: 13.5px; color: var(--text-sub); font-weight: 500; }
+  .countdown { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap; }
   .countdown-active  { background: #fffbeb; color: #d97706; }
   .countdown-ending  { background: #fef2f2; color: #dc2626; }
   .countdown-expired { background: var(--border-soft); color: var(--text-muted); }
 
-  /* 舊用，保留相容 */
-  .info-box { background: #f8fafc; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .info-box.outlined { background: #fff; border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 16px; }
-  .flex-between { justify-content: space-between; width: 100%; }
   .target-content { display: flex; flex-direction: column; gap: 4px; }
   .target-label { font-size: 11px; color: var(--text-muted); font-weight: 700; }
   .target-val { font-size: 14px; color: var(--text); font-weight: 700; }
 
-  /* ── 活動品項區 ── */
-  .items-zone {
-    border: 1px solid #e8edf5;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 14px;
-  }
-  .zone-header {
-    background: #f0f4fb;
-    padding: 7px 14px;
-    font-size: 11px;
-    font-weight: 800;
-    color: #4a5578;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    border-bottom: 1px solid #e8edf5;
-  }
-  .tag-mixable { background: #dbeafe; color: #1d4ed8; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 700; letter-spacing: 0.5px; }
-  .items-list { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
-
-  /* 條列項目 */
-  .row-item { display: flex; align-items: flex-start; gap: 10px; border-radius: 7px; padding: 8px 10px; }
-  .row-item.bg-gray  { background: #f8fafc; }
-  .row-item.bg-white { background: #fff; border: 1px solid #edf0f7; }
-  .row-num { background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 900; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'DM Mono', monospace; margin-top: 1px; }
-  .row-text { font-size: 13px; color: #374151; line-height: 1.62; word-break: break-word; overflow-wrap: anywhere; }
-  .row-text.text-sm { font-size: 12px; line-height: 1.58; }
-  .row-text.text-xs { font-size: 11.5px; line-height: 1.55; }
-
-  /* 舊 section-title 保留 */
+  /* 區塊標題與混搭 Tag */
   .section-title { font-size: 12.5px; font-weight: 700; color: var(--text-muted); margin: 16px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .tag-mixable { background: #eff6ff; color: #3b82f6; font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 700; letter-spacing: 0.5px; }
 
-  /* ── 促銷重點區 ── */
-  .highlights-wrap {
-    border: 1.5px solid #dde3f0;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-top: 4px;
-  }
-  .hl-main-title {
-    background: linear-gradient(135deg, #eef2ff 0%, #f0f4ff 100%);
-    font-size: 12px;
-    color: var(--accent);
-    font-weight: 900;
-    padding: 9px 16px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    letter-spacing: 0.6px;
-    border-bottom: 1px solid #dde3f0;
-  }
-  .hl-section { padding: 12px 14px; border-bottom: 1px solid #edf0f7; }
-  .hl-section:last-child { border-bottom: none; padding-bottom: 14px; }
-
-  /* 不同類型的 badge 用顏色區分 */
-  .hl-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 4px 11px; border-radius: 6px;
-    font-size: 11.5px; font-weight: 900;
-    margin-bottom: 9px;
-    letter-spacing: 0.3px;
-  }
-  .hl-badge-promo   { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
-  .hl-badge-bonus   { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-  .hl-badge-consumer { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-  .hl-badge-notes   { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+  /* 條列項目通用樣式 (活動品項 & 重點列表) */
+  .row-item { display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
+  .row-item.white-bg { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.03); border: 1px solid var(--border-soft); }
+  .row-num { background: var(--accent); color: #fff; font-size: 11.5px; font-weight: 900; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'DM Mono', monospace; box-shadow: 0 2px 6px rgba(79,124,255,0.3); }
+  .row-text { font-size: 13.5px; color: var(--text-sub); line-height: 1.6; margin-top: 1px; word-break: break-word; overflow-wrap: anywhere; }
+  .row-text.text-sm { font-size: 12px; line-height: 1.55; }
+  .row-text.text-xs { font-size: 11px; line-height: 1.5; }
 
   /* 卡片文字整體縮放 */
-  .card-text-sm .row-text { font-size: 12.5px; }
+  .card-text-sm .row-text { font-size: 12.5px; line-height: 1.58; }
+  .card-text-sm .row-item { padding: 9px 13px; margin-bottom: 7px; }
   .card-text-sm .card-title { font-size: 15px; }
-  .card-text-sm .period-text { font-size: 12px; }
-  .card-text-xs .row-text { font-size: 12px; }
-  .card-text-xs .row-num { width: 18px; height: 18px; font-size: 10px; }
-  .card-text-xs .card-title { font-size: 14px; }
-  .card-text-xs .period-text { font-size: 11.5px; }
-  .card-text-xs .hl-badge { font-size: 11px; padding: 3px 9px; }
+  .card-text-sm .period-text { font-size: 12.5px; }
+  .card-text-xs .row-text { font-size: 12px; line-height: 1.55; }
+  .card-text-xs .row-item { padding: 8px 11px; margin-bottom: 6px; }
+  .card-text-xs .row-num { width: 20px; height: 20px; font-size: 10.5px; }
+  .card-text-xs .card-title { font-size: 14.5px; }
+  .card-text-xs .period-text { font-size: 12px; }
+  .card-text-xs .hl-badge { font-size: 11.5px; padding: 4px 10px; }
+  .card-text-xs .highlights-wrap { padding: 13px 15px; }
+
+  /* 促銷重點灰色大外框 */
+  .highlights-wrap { background: #f1f5f9; border-radius: 12px; padding: 16px 18px; margin-top: 18px; }
+  .hl-main-title { font-size: 13.5px; color: var(--accent); font-weight: 900; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px; }
+  .hl-section { margin-bottom: 16px; }
+  .hl-section:last-child { margin-bottom: 0; }
+  .hl-badge { background: #fff; border: 1px solid var(--border); padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 900; color: var(--text); display: inline-flex; align-items: center; gap: 5px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 
   /* 編輯面板 */
   .card-edit-panel { display: none; border-top: 1px dashed var(--border); margin-top: 16px; padding-top: 16px; animation: slideDown 0.2s ease; }
@@ -622,9 +554,10 @@
       <div class="logo-icon">📊</div>
       <div>
         <div class="logo-main">促案活動總覽</div>
+        <div class="logo-sub">PROMO BOARD · 到期自動移除</div>
       </div>
     </div>
-    <div class="stats-bar">
+    <div class="stats-bar" style="display:none;">
       <div class="stat-pill">
         <div class="stat-num" id="totalCount">0</div>
         <div class="stat-label">活動總數</div>
@@ -640,13 +573,6 @@
       <div class="stat-pill clickable" id="mgmtPill" onclick="toggleAdminPanel()" title="活動方案管理">
         <div class="stat-icon">⚙️</div>
         <div class="stat-mgmt-label">活動方案管理</div>
-      </div>
-      <div class="stat-pill clickable" onclick="loadFromSheet(false)" title="立即從試算表重新載入" style="display:flex;align-items:center;gap:6px;padding:8px 14px;">
-        <span style="font-size:14px;">🔄</span>
-        <div>
-          <div class="stat-mgmt-label">同步試算表</div>
-          <div id="sheetStatus" style="font-size:10px;color:var(--text-muted);margin-top:1px;">載入中…</div>
-        </div>
       </div>
     </div>
   </header>
@@ -1149,84 +1075,68 @@ function parseCSV(text) {
   }).filter(p => p && p.title);
 }
 
-let lastSheetLoadTime = null;
-
-function updateSheetStatus(success) {
-  const el = document.getElementById('sheetStatus');
-  if (!el) return;
-  if (success) {
-    lastSheetLoadTime = new Date();
-    const hh = String(lastSheetLoadTime.getHours()).padStart(2,'0');
-    const mm = String(lastSheetLoadTime.getMinutes()).padStart(2,'0');
-    el.textContent = '上次更新 ' + hh + ':' + mm;
-    el.style.color = 'var(--text-muted)';
-  } else {
-    el.textContent = '⚠️ 同步失敗';
-    el.style.color = '#ef4444';
-  }
-}
-
-function loadFromSheet(silent) {
+function loadFromSheet() {
   const overlay = document.getElementById('loadingOverlay');
-  if (!silent && overlay) overlay.style.display = 'flex';
-
-  // cache-busting
-  const cacheBust = '&t=' + Date.now();
-  const baseUrl = SHEET_CSV_URL + cacheBust;
-  const urls = [
-    SHEET_CSV_URL + cacheBust,                                                          // 直接請求（部分環境支援）
-    'https://corsproxy.io/?' + encodeURIComponent(baseUrl),                             // proxy 1
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(baseUrl),                // proxy 2
-    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(baseUrl),           // proxy 3
-    'https://thingproxy.freeboard.io/fetch/' + encodeURIComponent(baseUrl),             // proxy 4
-  ];
+  if (overlay) overlay.style.display = 'flex';
 
   function onSuccess(text) {
     const sheetPromos = parseCSV(text);
-    if (!sheetPromos.length) { onError(new Error('empty result')); return; }
     const localPromos = promos.filter(p => !p.fromSheet);
     promos = [...sheetPromos, ...localPromos];
     try { removedCount = parseInt(localStorage.getItem('removedCount') || '0'); } catch(e) {}
     if (overlay) overlay.style.display = 'none';
     cleanExpired();
     render();
-    updateSheetStatus(true);
-    if (!silent) showToast('✅ 已從試算表載入 ' + sheetPromos.length + ' 筆活動');
+    showToast('✅ 已從試算表載入 ' + sheetPromos.length + ' 筆活動');
   }
 
   function onError(err) {
-    console.error('[Sheet] 全部 proxy 失敗:', err.message);
+    console.error('載入失敗:', err);
     if (overlay) overlay.style.display = 'none';
-    // ⚠️ 不清空現有資料，保留上次成功的資料
-    updateSheetStatus(false);
-    if (!silent) showToast('⚠️ 試算表同步失敗，顯示上次資料');
+    promos = [];
+    removedCount = 0;
+    localStorage.setItem('removedCount', '0');
+    cleanExpired();
+    render();
+    showToast('⚠️ 試算表載入失敗，請重新整理');
   }
 
-  // 依序嘗試各 proxy
-  function tryNext(idx) {
-    if (idx >= urls.length) { onError(new Error('all proxies failed')); return; }
-    const url = urls[idx];
-    console.log('[Sheet] 嘗試 proxy', idx, url.split('?')[0]);
-    fetch(url)
-      .then(r => { if (!r.ok) throw new Error('status ' + r.status); return r.text(); })
-      .then(text => {
-        if (text.trim().startsWith('<') || text.trim().length < 10) throw new Error('invalid response');
-        onSuccess(text);
-      })
-      .catch(e => {
-        console.warn('[Sheet] proxy', idx, '失敗:', e.message);
-        tryNext(idx + 1);
-      });
-  }
-
-  tryNext(0);
+  // 方法1: corsproxy.io
+  console.log('[Sheet] 嘗試 corsproxy.io...');
+  fetch('https://corsproxy.io/?' + encodeURIComponent(SHEET_CSV_URL))
+    .then(r => { if (!r.ok) throw new Error('corsproxy status ' + r.status); return r.text(); })
+    .then(text => {
+      console.log('[Sheet] corsproxy 回傳前100字:', text.slice(0,100));
+      if (text.trim().startsWith('<')) throw new Error('got html not csv');
+      onSuccess(text);
+    })
+    .catch(e1 => {
+      console.warn('[Sheet] corsproxy 失敗:', e1.message, '改用 allorigins...');
+      fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV_URL))
+        .then(r => { if (!r.ok) throw new Error('allorigins status ' + r.status); return r.text(); })
+        .then(text => {
+          console.log('[Sheet] allorigins 回傳前100字:', text.slice(0,100));
+          if (text.trim().startsWith('<')) throw new Error('got html not csv');
+          onSuccess(text);
+        })
+        .catch(e2 => {
+          console.warn('[Sheet] allorigins 失敗:', e2.message, '改用 htmlescape proxy...');
+          fetch('https://thingproxy.freeboard.io/fetch/' + SHEET_CSV_URL)
+            .then(r => { if (!r.ok) throw new Error('thingproxy status ' + r.status); return r.text(); })
+            .then(text => {
+              console.log('[Sheet] thingproxy 回傳前100字:', text.slice(0,100));
+              if (text.trim().startsWith('<')) throw new Error('got html not csv');
+              onSuccess(text);
+            })
+            .catch(e3 => {
+              console.error('[Sheet] 全部 proxy 失敗:', e3.message);
+              onError(e3);
+            });
+        });
+    });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadFromSheet(false);
-  // 每 3 分鐘靜默更新
-  setInterval(() => loadFromSheet(true), 3 * 60 * 1000);
-});
+document.addEventListener('DOMContentLoaded', () => { loadFromSheet(); setInterval(loadFromSheet, 5 * 60 * 1000); });
 
 // ── Image handling ─────────────────────────────────────────
 function handleImageUpload(e) {
@@ -1613,9 +1523,9 @@ function renderCard(p) {
   const renderRowItem = (text, index, isWhite = false) => {
     if (!text) return '';
     const len = text.length;
+    // 只在文字極長時才個別縮小，避免與卡片整體縮放疊加後過小
     const sizeClass = len > 120 ? 'text-xs' : len > 80 ? 'text-sm' : '';
-    const bgCls = isWhite ? 'bg-white' : 'bg-gray';
-    return `<div class="row-item ${bgCls}">
+    return `<div class="row-item ${isWhite ? 'white-bg' : ''}">
       <div class="row-num">${index + 1}</div>
       <div class="row-text ${sizeClass}">${text}</div>
     </div>`;
@@ -1631,14 +1541,12 @@ function renderCard(p) {
       : renderRowItem(p.items.replace(/。$/, ''), 0, false);
   }
 
-  const badgeClsMap = { '💰':'hl-badge-promo', '🎁':'hl-badge-bonus', '🛒':'hl-badge-consumer', '📝':'hl-badge-notes' };
   const sectionItems = (icon, title, items) => {
     if (!items || !items.length) return '';
     const safeItems = items.map(v => formatBulletItem(v)).filter(Boolean);
     if (!safeItems.length) return '';
-    const badgeCls = badgeClsMap[icon] || '';
     return `<div class="hl-section">
-      <div class="hl-badge ${badgeCls}">${icon} ${title}</div>
+      <div class="hl-badge">${icon} ${title}</div>
       ${safeItems.map((item, i) => renderRowItem(item, i, true)).join('')}
     </div>`;
   };
@@ -1680,7 +1588,7 @@ function renderCard(p) {
       '</div>'
     ).join('');
     return '<div class="hl-section" style="margin-top:4px;">' +
-      '<div class="hl-badge hl-badge-notes" style="margin-bottom:10px;">📝 備註</div>' +
+      '<div class="hl-badge" style="margin-bottom:10px;">📝 備註</div>' +
       '<div class="row-item white-bg" style="background:#fffbeb;border-left:3px solid #f59e0b;display:block;padding:10px 14px;">' +
       itemsHtml +
       '</div></div>';
@@ -1714,45 +1622,45 @@ function renderCard(p) {
                       : totalTextLen > 400 ? 'card-text-sm'
                       : '';
   return `<div class="promo-card ${cardCls} ${cardFontScale} ${isExpired?'expired':''}" id="card-${p.id}">
-    <div class="card-stripe"></div>
     <div class="card-body">
 
-      <!-- 標題列 -->
       <div class="card-header-row">
         <div class="card-title">${titleDisplay}</div>
-        <div class="card-btns">${dmButtons}</div>
+        <div class="card-btns">
+          ${dmButtons}
+        </div>
       </div>
 
-      <!-- 品項 tags -->
       <div class="tags-row">${tagHtml}</div>
 
-      <!-- 資訊區（日期＋對象合一區塊） -->
-      <div class="card-meta-zone">
-        <div class="meta-row">
-          <span class="meta-icon">📅</span>
+      <div class="info-box flex-between">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size: 15px;">📅</span>
           <span class="period-text">${periodText}</span>
-          ${cd.text !== '無期限' ? `<span class="countdown ${cd.cls}">${cd.text}</span>` : ''}
         </div>
-        ${p.target ? `<div class="meta-row">
-          <span class="meta-icon">🎯</span>
-          <span class="meta-label">對象</span>
-          <span class="meta-val">${p.target}</span>
-        </div>` : ''}
+        ${cd.text !== '無期限' ? `<span class="countdown ${cd.cls}">${cd.text}</span>` : ''}
       </div>
 
-      <!-- 活動品項 -->
-      ${itemsHtml ? `<div class="items-zone">
-        <div class="zone-header">
-          📦 活動品項
-          ${p.mixable ? `<span class="tag-mixable">可混搭</span>` : ''}
+      ${p.target ? `
+      <div class="info-box outlined">
+        <div style="font-size: 18px;">🎯</div>
+        <div class="target-content">
+          <div class="target-label">活動對象</div>
+          <div class="target-val">${p.target}</div>
         </div>
-        <div class="items-list">${itemsHtml}</div>
       </div>` : ''}
 
-      <!-- 促銷重點 -->
+      ${itemsHtml ? `
+      <div>
+        <div class="section-title">
+          活動品項
+          ${p.mixable ? `<span class="tag-mixable">可混搭</span>` : ''}
+        </div>
+        ${itemsHtml}
+      </div>` : ''}
+
       ${highlightHtml}
 
-      <!-- 編輯面板 -->
       <div class="card-edit-panel" id="editpanel-${p.id}">
         <div class="edit-field-group">
           <div class="edit-field-label">活動名稱</div>
@@ -1764,8 +1672,8 @@ function renderCard(p) {
             <option value="traditional" ${p.channels.includes('traditional')?'selected':''}>傳統通路</option>
             <option value="special"     ${p.channels.includes('special')    ?'selected':''}>特販通路</option>
             <option value="bulk"        ${p.channels.includes('bulk')       ?'selected':''}>量販通路</option>
-            <option value="customer"    ${p.channels.includes('customer')   ?'selected':''}>消費者端</option>
-            <option value="restaurant"  ${p.channels.includes('restaurant') ?'selected':''}>餐飲通路</option>
+            <option value="customer"        ${p.channels.includes('customer')       ?'selected':''}>消費者端</option>
+            <option value="restaurant"     ${p.channels.includes('restaurant')    ?'selected':''}>餐飲通路</option>
           </select>
         </div>
         <div class="edit-field-group">
@@ -1819,7 +1727,7 @@ function renderCard(p) {
       </div>
 
     </div>
-  </div>\`;
+  </div>`;
 }
 
 // ── Inline Edit ────────────────────────────────────────────
