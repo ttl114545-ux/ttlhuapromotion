@@ -147,7 +147,7 @@
   .channel-section { margin-bottom: 36px; }
   .channel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .channel-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .dot-trad { background: var(--trad); } .dot-special { background: var(--special); } .dot-bulk { background: var(--bulk); }
+  .dot-trad { background: var(--trad); } .dot-special { background: var(--special); } .dot-bulk { background: var(--bulk); } .dot-restaurant { background: #f97316; }
   .channel-name { font-size: 16px; font-weight: 900; color: var(--text); }
   .channel-line { flex: 1; height: 1px; background: var(--border); }
   .channel-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); background: var(--surface2); padding: 3px 10px; border-radius: 20px; }
@@ -674,6 +674,7 @@
       <button class="filter-chip" data-filter="channel" data-value="special" onclick="setFilter('channel','special',this)">特販通路</button>
       <button class="filter-chip" data-filter="channel" data-value="bulk" onclick="setFilter('channel','bulk',this)">量販通路</button>
       <button class="filter-chip" data-filter="channel" data-value="customer" onclick="setFilter('channel','customer',this)">消費者端</button>
+      <button class="filter-chip" data-filter="channel" data-value="restaurant" onclick="setFilter('channel','restaurant',this)">餐飲通路</button>
     </div>
     <div class="filter-divider"></div>
     <span class="filter-label">品項</span>
@@ -1014,7 +1015,8 @@ function parseCSV(text) {
     console.log('[CSV] row'+(idx+2)+':', cols);
 
     const get = (key) => {
-      const i = headers.indexOf(key);
+      const keyLower = key.toLowerCase();
+      const i = headers.findIndex(h => h.toLowerCase() === keyLower);
       if (i < 0 || i >= cols.length) return '';
       return cols[i].replace(/^"+|"+$/g, '').replace(/\r/g,'').trim();
     };
@@ -1031,7 +1033,7 @@ function parseCSV(text) {
     };
 
     const channelRaw = get('channel') || 'traditional';
-    const channelMap = { '傳統通路':'traditional', 'traditional':'traditional', '特販通路':'special', 'special':'special', '量販通路':'bulk', 'bulk':'bulk', '消費者端':'customer', 'customer':'customer' };
+    const channelMap = { '傳統通路':'traditional', 'traditional':'traditional', '特販通路':'special', 'special':'special', '量販通路':'bulk', 'bulk':'bulk', '消費者端':'customer', 'customer':'customer', '餐飲通路':'restaurant', 'restaurant':'restaurant' };
     const splitMulti = (str) => str.split(/[|,]/).map(s => s.trim()).filter(Boolean);
     const channels = (() => { const arr = splitMulti(channelRaw).map(c => channelMap[c]).filter(Boolean); return arr.length ? arr : ['traditional']; })();
 
@@ -1053,7 +1055,7 @@ function parseCSV(text) {
       promoMethods: getArr('promoMethods'),
       bonuses: getArr('bonuses'),
       consumerActivities: getArr('consumerActivities'),
-      notes: get('notes') || '',
+      notes: (get('notes') || get('備註') || '').replace(/\|/g, '\n'),
       mixable: get('mixable') === 'TRUE' || get('mixable') === '是' || get('mixable') === '1',
       images: (() => {
         // 支援 dmImageUrl 欄位：可填多個 Google Drive 圖片連結，用 | 分隔
@@ -1194,6 +1196,7 @@ function detectChannel(text) {
   if (/傳統通路|傳統店|一般通路|虛擬通路|系統店/.test(text)) ch.push('traditional');
   if (/特販|便利商店|超商|統一|全聯|全家|萊爾富|OK/.test(text)) ch.push('special');
   if (/量販/.test(text)) ch.push('bulk');
+  if (/餐飲|餐廳|飯店|restaurant/.test(text)) ch.push('restaurant');
   return ch.length ? ch : ['traditional'];
 }
 
@@ -1456,7 +1459,8 @@ const CHANNELS = [
   { key: 'traditional', name: '傳統通路', dotCls: 'dot-trad' },
   { key: 'special',     name: '特販通路', dotCls: 'dot-special' },
   { key: 'bulk',        name: '量販通路', dotCls: 'dot-bulk' },
-{ key: 'customer', name: '消費者端', dotCls: 'dot-trad' },	
+{ key: 'customer', name: '消費者端', dotCls: 'dot-trad' },
+  { key: 'restaurant', name: '餐飲通路', dotCls: 'dot-restaurant' },	
 ];
 
 const PRODUCT_MAP = {
@@ -1574,7 +1578,13 @@ function renderCard(p) {
   }
   
   // 加上備註區塊
-  const notesHtml = p.notes ? `<div class="hl-section"><div class="hl-badge">📝 備註</div><div class="row-item white-bg" style="margin-bottom:0"><div class="row-text">${p.notes}</div></div></div>` : '';
+  const notesHtml = p.notes
+    ? `<div class="hl-section" style="margin-top:4px;">
+        <div class="row-item white-bg" style="margin-bottom:0;background:#fffbeb;border-left:3px solid #f59e0b;">
+          <div class="row-text" style="font-size:12px;color:#78350f;white-space:pre-wrap;">${p.notes.replace(/\\n/g,'\n')}</div>
+        </div>
+      </div>`
+    : '';
   const highlightHtml = (highlightContent || notesHtml)
     ? `<div class="highlights-wrap"><div class="hl-main-title">✦ 促銷重點</div>${highlightContent}${notesHtml}</div>`
     : '';
@@ -1655,6 +1665,7 @@ function renderCard(p) {
             <option value="special"     ${p.channels.includes('special')    ?'selected':''}>特販通路</option>
             <option value="bulk"        ${p.channels.includes('bulk')       ?'selected':''}>量販通路</option>
             <option value="customer"        ${p.channels.includes('customer')       ?'selected':''}>消費者端</option>
+            <option value="restaurant"     ${p.channels.includes('restaurant')    ?'selected':''}>餐飲通路</option>
           </select>
         </div>
         <div class="edit-field-group">
