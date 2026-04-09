@@ -629,7 +629,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">channel</td><td style="padding:7px 12px;border:1px solid var(--border);">通路分類</td><td style="padding:7px 12px;border:1px solid var(--border);">傳統通路 / 特販通路 / 量販通路 / 消費者端/ 餐飲通路</td></tr>
+          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">channel</td><td style="padding:7px 12px;border:1px solid var(--border);">通路分類</td><td style="padding:7px 12px;border:1px solid var(--border);">傳統通路 / 特販通路 / 量販通路 / 消費者端</td></tr>
           <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">product</td><td style="padding:7px 12px;border:1px solid var(--border);">品項分類</td><td style="padding:7px 12px;border:1px solid var(--border);">啤酒 / 烈酒 / 菸 / 泡麵 / 其他</td></tr>
           <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">mixable</td><td style="padding:7px 12px;border:1px solid var(--border);">是否可混搭</td><td style="padding:7px 12px;border:1px solid var(--border);">是 / 否</td></tr>
           <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#10b981;font-weight:700;">dmImageUrl</td><td style="padding:7px 12px;border:1px solid var(--border);">🆕 DM 圖片（Google Drive 連結），多張用 | 分隔</td><td style="padding:7px 12px;border:1px solid var(--border);color:var(--text-muted);">貼入分享連結即可</td></tr>
@@ -643,7 +643,7 @@
       <div style="font-size:12px;font-weight:700;color:#065f46;margin-bottom:6px;">💡 如何在 Google 試算表設定下拉選單</div>
       <div style="font-size:11.5px;color:#047857;line-height:1.9;">
         1. 選取 <b>channel</b> 欄位整欄 → 上方選單點「資料」→「資料驗證」<br>
-        2. 「條件」選擇「下拉式清單」，輸入選項：<b>傳統通路, 特販通路, 量販通路, 消費者端, 餐飲通路</b><br>
+        2. 「條件」選擇「下拉式清單」，輸入選項：<b>傳統通路, 特販通路, 量販通路, 消費者端</b><br>
         3. 同方式設定 <b>product</b>：<b>啤酒, 烈酒, 菸, 泡麵, 其他</b><br>
         4. <b>mixable</b> 欄位設定：<b>是, 否</b>
       </div>
@@ -674,7 +674,6 @@
       <button class="filter-chip" data-filter="channel" data-value="special" onclick="setFilter('channel','special',this)">特販通路</button>
       <button class="filter-chip" data-filter="channel" data-value="bulk" onclick="setFilter('channel','bulk',this)">量販通路</button>
       <button class="filter-chip" data-filter="channel" data-value="customer" onclick="setFilter('channel','customer',this)">消費者端</button>
-      <button class="filter-chip" data-filter="channel" data-value="restaurant" onclick="setFilter('channel','restaurant',this)">餐飲通路</button>
     </div>
     <div class="filter-divider"></div>
     <span class="filter-label">品項</span>
@@ -1032,7 +1031,7 @@ function parseCSV(text) {
     };
 
     const channelRaw = get('channel') || 'traditional';
-    const channelMap = { '傳統通路':'traditional', 'traditional':'traditional', '特販通路':'special', 'special':'special', '量販通路':'bulk', 'bulk':'bulk', '消費者端':'customer', 'customer':'customer' , '餐飲通路':'restaurant', 'restaurant':'restaurant' };
+    const channelMap = { '傳統通路':'traditional', 'traditional':'traditional', '特販通路':'special', 'special':'special', '量販通路':'bulk', 'bulk':'bulk', '消費者端':'customer', 'customer':'customer' };
     const splitMulti = (str) => str.split(/[|,]/).map(s => s.trim()).filter(Boolean);
     const channels = (() => { const arr = splitMulti(channelRaw).map(c => channelMap[c]).filter(Boolean); return arr.length ? arr : ['traditional']; })();
 
@@ -1054,6 +1053,7 @@ function parseCSV(text) {
       promoMethods: getArr('promoMethods'),
       bonuses: getArr('bonuses'),
       consumerActivities: getArr('consumerActivities'),
+      notes: get('notes') || '',
       mixable: get('mixable') === 'TRUE' || get('mixable') === '是' || get('mixable') === '1',
       images: (() => {
         // 支援 dmImageUrl 欄位：可填多個 Google Drive 圖片連結，用 | 分隔
@@ -1348,6 +1348,7 @@ function parseActivityBlock(block, idx, attachedImages) {
     promoMethods,
     bonuses,
     consumerActivities,
+    notes: extractMultilineField(block, '備註', 'notes', '注意事項', '說明'),
     mixable,
     images: attachedImages.filter(Boolean),
     createdAt: new Date().toISOString()
@@ -1455,8 +1456,7 @@ const CHANNELS = [
   { key: 'traditional', name: '傳統通路', dotCls: 'dot-trad' },
   { key: 'special',     name: '特販通路', dotCls: 'dot-special' },
   { key: 'bulk',        name: '量販通路', dotCls: 'dot-bulk' },
-{ key: 'customer', name: '消費者端', dotCls: 'dot-trad' },
-{ key: 'restaurant', name: '餐飲通路', dotCls: 'dot-trad' },	
+{ key: 'customer', name: '消費者端', dotCls: 'dot-trad' },	
 ];
 
 const PRODUCT_MAP = {
@@ -1573,8 +1573,10 @@ function renderCard(p) {
     highlightContent += sectionItems('🛒', '消費者活動', renderConsumer);
   }
   
-  const highlightHtml = highlightContent
-    ? `<div class="highlights-wrap"><div class="hl-main-title">✦ 促銷重點</div>${highlightContent}</div>`
+  // 加上備註區塊
+  const notesHtml = p.notes ? `<div class="hl-section"><div class="hl-badge">📝 備註</div><div class="row-item white-bg" style="margin-bottom:0"><div class="row-text">${p.notes}</div></div></div>` : '';
+  const highlightHtml = (highlightContent || notesHtml)
+    ? `<div class="highlights-wrap"><div class="hl-main-title">✦ 促銷重點</div>${highlightContent}${notesHtml}</div>`
     : '';
 
   const dmButtons = p.images?.length
@@ -1587,6 +1589,7 @@ function renderCard(p) {
   const promoEditVal  = (p.promoMethods || []).map(formatBulletItem).join('\n');
   const bonusEditVal  = (p.bonuses || []).map(formatBulletItem).join('\n');
   const consumerEditVal = (p.consumerActivities || []).map(formatBulletItem).join('\n');
+  const notesEditVal = (p.notes || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 
   // 計算卡片總文字量，動態縮放字體
@@ -1652,7 +1655,6 @@ function renderCard(p) {
             <option value="special"     ${p.channels.includes('special')    ?'selected':''}>特販通路</option>
             <option value="bulk"        ${p.channels.includes('bulk')       ?'selected':''}>量販通路</option>
             <option value="customer"        ${p.channels.includes('customer')       ?'selected':''}>消費者端</option>
-            <option value="restaurant"        ${p.channels.includes('restaurant')       ?'selected':''}>餐飲通路</option>
           </select>
         </div>
         <div class="edit-field-group">
@@ -1684,6 +1686,10 @@ function renderCard(p) {
         <div class="edit-field-group">
           <div class="edit-field-label">🎁 大購額加碼獎勵（每行一條）</div>
           <textarea class="edit-field-input" id="ef-bonus-${p.id}" rows="2" placeholder="每行一條加碼條件">${bonusEditVal}</textarea>
+        </div>
+        <div class="edit-field-group">
+          <div class="edit-field-label">📝 備註</div>
+          <textarea class="edit-field-input" id="ef-notes-${p.id}" rows="2" placeholder="備註說明">${notesEditVal}</textarea>
         </div>
         <div class="edit-field-group">
           <div class="edit-field-label">📄 活動 DM 圖片</div>
@@ -1747,6 +1753,7 @@ function confirmSave(id) {
   let newPromo    = lines(`ef-promo-${id}`);
   let newBonus    = lines(`ef-bonus-${id}`);
   let newConsumer = lines(`ef-consumer-${id}`);
+  const newNotes = g(`ef-notes-${id}`);
 
   // 自動清除編輯時新增的「可混搭」文字並轉為旗標
   let anyMixable = false;
@@ -1771,6 +1778,7 @@ function confirmSave(id) {
   if (newPromo    !== null) p.promoMethods = newPromo;
   if (newBonus    !== null) p.bonuses = newBonus;
   if (newConsumer !== null) p.consumerActivities = newConsumer;
+  if (newNotes !== null) p.notes = newNotes;
   
   // 若原本就有或是編輯時加入了混搭文字，則開啟 tag
   if (anyMixable) p.mixable = true;
