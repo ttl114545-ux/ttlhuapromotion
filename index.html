@@ -622,10 +622,9 @@
       <div class="logo-icon">📊</div>
       <div>
         <div class="logo-main">促案活動總覽</div>
-        <div class="logo-sub">ttl114545-ux.github.io/ttlhuapromotion</div>
       </div>
     </div>
-    <div class="stats-bar" style="display:none;">
+    <div class="stats-bar">
       <div class="stat-pill">
         <div class="stat-num" id="totalCount">0</div>
         <div class="stat-label">活動總數</div>
@@ -1173,10 +1172,13 @@ function loadFromSheet(silent) {
 
   // cache-busting
   const cacheBust = '&t=' + Date.now();
+  const baseUrl = SHEET_CSV_URL + cacheBust;
   const urls = [
-    'https://corsproxy.io/?' + encodeURIComponent(SHEET_CSV_URL + cacheBust),
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV_URL + cacheBust),
-    'https://thingproxy.freeboard.io/fetch/' + SHEET_CSV_URL + cacheBust,
+    SHEET_CSV_URL + cacheBust,                                                          // 直接請求（部分環境支援）
+    'https://corsproxy.io/?' + encodeURIComponent(baseUrl),                             // proxy 1
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(baseUrl),                // proxy 2
+    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(baseUrl),           // proxy 3
+    'https://thingproxy.freeboard.io/fetch/' + encodeURIComponent(baseUrl),             // proxy 4
   ];
 
   function onSuccess(text) {
