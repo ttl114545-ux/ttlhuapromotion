@@ -890,6 +890,7 @@ function renderMonth() {
       const e = p.endDate   ? formatDate(p.endDate)   : '';
       if (s && e) return `${s} ～ ${e}`;
       if (!s && e) return `即日起至 ${e}`;
+      if (s && !e) return `${s} 起`;
       return '無期限';
     })();
 
@@ -980,6 +981,7 @@ function openPromoPopup(id) {
     const e = p.endDate   ? formatDate(p.endDate)   : '';
     if (s && e) return `${s} ～ ${e}`;
     if (!s && e) return `即日起至 ${e}`;
+    if (s && !e) return `${s} 起`;
     return '無期限';
   })();
 
@@ -1575,8 +1577,9 @@ function renderCard(p) {
   const periodText = p.periodOverride || (() => {
     const s = p.startDate ? formatDate(p.startDate) : '';
     const e = p.endDate ? formatDate(p.endDate) : '';
-    if (s && e) return `即日起至${e}止`; // 簡化為常見樣式
+    if (s && e) return `${s} ～ ${e}`;
     if (!s && e) return `即日起至${e}止`;
+    if (s && !e) return `${s} 起`;
     return '無期限';
   })();
 
