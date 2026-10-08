@@ -1274,32 +1274,35 @@ function loadFromSheet() {
     showToast('⚠️ 試算表載入失敗，請重新整理');
   }
 
-  // 方法1: corsproxy.io
-  fetch('https://corsproxy.io/?' + encodeURIComponent(SHEET_CSV_URL))
-    .then(r => { if (!r.ok) throw new Error('corsproxy status ' + r.status); return r.text(); })
-    .then(text => {
-      if (text.trim().startsWith('<')) throw new Error('got html not csv');
-      onSuccess(text);
-    })
-    .catch(e1 => {
-      fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV_URL))
-        .then(r => { if (!r.ok) throw new Error('allorigins status ' + r.status); return r.text(); })
-        .then(text => {
-          if (text.trim().startsWith('<')) throw new Error('got html not csv');
-          onSuccess(text);
-        })
-        .catch(e2 => {
-          fetch('https://thingproxy.freeboard.io/fetch/' + SHEET_CSV_URL)
-            .then(r => { if (!r.ok) throw new Error('thingproxy status ' + r.status); return r.text(); })
-            .then(text => {
-              if (text.trim().startsWith('<')) throw new Error('got html not csv');
-              onSuccess(text);
-            })
-            .catch(e3 => {
-              onError(e3);
-            });
-        });
-    });
+  // 依序嘗試：直接讀取（Google 發佈的 CSV 通常允許跨網域）→ 備援代理
+  const bust = (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+  const sources = [
+    SHEET_CSV_URL + bust,
+    'https://corsproxy.io/?' + encodeURIComponent(SHEET_CSV_URL + bust),
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV_URL + bust),
+    'https://thingproxy.freeboard.io/fetch/' + SHEET_CSV_URL + bust
+  ];
+
+  function tryFetch(i, lastErr) {
+    if (i >= sources.length) { onError(lastErr || new Error('all sources failed')); return; }
+    fetch(sources[i], { cache: 'no-store' })
+      .then(r => { if (!r.ok) throw new Error('status ' + r.status); return r.text(); })
+      .then(text => {
+        if (text.trim().startsWith('<')) throw new Error('got html not csv');
+        return text;
+      })
+      .then(text => {
+        // 解析/渲染錯誤不要誤判成「連線失敗」而去換下一個來源
+        try { onSuccess(text); }
+        catch (e) {
+          console.error('解析或顯示錯誤:', e);
+          if (overlay) overlay.style.display = 'none';
+          showToast('⚠️ 已取得資料但顯示時出錯：' + e.message);
+        }
+      })
+      .catch(err => { console.warn('來源 ' + i + ' 失敗:', err); tryFetch(i + 1, err); });
+  }
+  tryFetch(0);
 }
 
 document.addEventListener('DOMContentLoaded', () => { loadFromSheet(); setInterval(loadFromSheet, 5 * 60 * 1000); });
