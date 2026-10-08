@@ -335,6 +335,72 @@
   /* drag handle */
   .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 4px; margin: 10px auto 0; }
 
+  /* ── HEADER (v2) ───────────────────────────────────────── */
+  .top-bar { display:flex; align-items:center; justify-content:space-between; width:100%; gap:12px; flex-wrap:wrap; }
+  .top-bar-left { display:flex; align-items:center; gap:10px; }
+  .top-bar-right { display:flex; align-items:center; gap:10px; }
+  .top-icon-btn { width:34px; height:34px; border-radius:9px; border:1px solid var(--border); background:var(--surface); color:var(--text-sub); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; transition:all .18s; flex-shrink:0; }
+  .top-icon-btn:hover { background:var(--surface2); border-color:var(--accent); color:var(--accent); }
+  .sync-status { display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+  .sync-status-row { display:flex; align-items:center; gap:5px; font-size:10px; font-weight:800; letter-spacing:0.8px; color:var(--text-muted); text-transform:uppercase; }
+  .sync-dot { width:7px; height:7px; border-radius:50%; background:#94a3b8; flex-shrink:0; }
+  .sync-dot.ok { background:#22c55e; box-shadow:0 0 0 3px rgba(34,197,94,0.18); }
+  .sync-time { font-size:10.5px; color:var(--text-muted); font-family:'DM Mono',monospace; }
+
+  /* ── CHANNEL TABS ──────────────────────────────────────── */
+  .channel-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+  .channel-tab { padding:9px 18px; border-radius:10px; border:1.5px solid var(--border); background:var(--surface); color:var(--text-sub); font-family:'Noto Sans TC',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all .18s; }
+  .channel-tab:hover { border-color:var(--text); color:var(--text); }
+  .channel-tab.active { background:#1e293b; border-color:#1e293b; color:#fff; box-shadow:0 3px 10px rgba(30,41,59,0.25); }
+
+  /* ── SUMMARY BAR ───────────────────────────────────────── */
+  .summary-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+  .summary-heading { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .summary-title { font-size:19px; font-weight:900; color:var(--text); }
+  .summary-breakdown { font-size:12.5px; color:var(--text-muted); }
+  .summary-breakdown b { color:var(--text-sub); font-weight:800; }
+  .summary-breakdown .sep { margin:0 6px; color:var(--border); }
+  .audience-filter { display:flex; gap:6px; }
+  .audience-chip { padding:6px 14px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); color:var(--text-sub); font-size:12px; font-weight:700; cursor:pointer; transition:all .18s; font-family:'Noto Sans TC',sans-serif; }
+  .audience-chip:hover { border-color:var(--accent); color:var(--accent); }
+  .audience-chip.active { background:var(--text); border-color:var(--text); color:#fff; }
+
+  /* ── ACTIVITY TYPE SECTION HEADER ──────────────────────── */
+  .type-section { margin-bottom: 34px; }
+  .type-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .type-name { font-size:14px; font-weight:900; color:var(--text); background:var(--surface2); padding:6px 14px; border-radius:8px; border:1px solid var(--border); }
+  .type-dotted-line { flex:1; height:0; border-top:2px dotted var(--border); }
+
+  /* ── POSTER CARD ───────────────────────────────────────── */
+  .promo-card.poster { display:flex; flex-direction:column; }
+  .poster-hero { position:relative; width:100%; aspect-ratio: 4/3; background-size:cover; background-position:center; background-color:#eef1f8; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .poster-hero-fallback { font-size:44px; opacity:0.55; }
+  .poster-countdown { position:absolute; top:10px; left:10px; background:#f59e0b; color:#fff; font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px; box-shadow:0 3px 8px rgba(0,0,0,0.18); font-family:'DM Mono',monospace; }
+  .poster-countdown.countdown-active { background:#f59e0b; }
+  .poster-countdown.countdown-ending { background:#ef4444; }
+  .poster-countdown.countdown-expired { background:#94a3b8; }
+  .poster-body { padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .poster-date { display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--text-muted); }
+  .poster-title { font-size:16px; font-weight:900; color:#0f172a; line-height:1.4; overflow-wrap:anywhere; cursor:pointer; }
+  .poster-footer { display:flex; align-items:center; justify-content:space-between; margin-top:4px; gap:8px; }
+  .poster-status { display:flex; align-items:center; gap:6px; font-size:10.5px; font-weight:800; letter-spacing:0.6px; color:var(--text-muted); font-family:'DM Mono',monospace; }
+  .poster-status .status-dot { width:7px; height:7px; border-radius:50%; background:#cbd5e1; }
+  .poster-status.status-on .status-dot { background:#22c55e; box-shadow:0 0 0 3px rgba(34,197,94,0.18); }
+  .poster-status.status-on { color:#16a34a; }
+  .poster-actions { display:flex; align-items:center; gap:6px; }
+  .poster-details-btn { display:flex; align-items:center; gap:4px; padding:8px 14px; border-radius:9px; border:1.5px solid #1e293b; background:#1e293b; color:#fff; font-size:12px; font-weight:800; cursor:pointer; transition:all .18s; font-family:'Noto Sans TC',sans-serif; }
+  .poster-details-btn:hover { background:#334155; }
+
+  @media (max-width: 600px) {
+    .top-bar { align-items:flex-start; }
+    .sync-status { align-items:flex-start; }
+    .channel-tabs { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px; }
+    .channel-tab { white-space:nowrap; padding:8px 14px; font-size:12px; }
+    .summary-title { font-size:16px; }
+    .summary-breakdown { font-size:11px; }
+    .poster-title { font-size:14px; }
+  }
+
   /* EMPTY */
   .empty-state { text-align: center; padding: 80px 40px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
   .empty-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.5; }
@@ -609,10 +675,20 @@
 <div class="container">
 
   <header>
-    <div class="header-title-row">
-      <div class="logo-icon">📊</div>
-      <div>
-        <div class="logo-main">促案活動總覽</div>
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <div class="logo-icon">📊</div>
+        <div>
+          <div class="logo-main">產品促銷活動查詢</div>
+          <div class="sync-time" id="lastSyncText">LAST SYNC: —</div>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <button class="top-icon-btn" onclick="loadFromSheet()" title="重新同步試算表">🔄</button>
+        <button class="top-icon-btn" id="mgmtPill" onclick="toggleAdminPanel()" title="活動方案管理">⚙️</button>
+        <div class="sync-status">
+          <div class="sync-status-row"><span class="sync-dot" id="syncDot"></span><span>STATUS</span></div>
+        </div>
       </div>
     </div>
     <div class="stats-bar" style="display:none;">
@@ -627,17 +703,6 @@
       <div class="stat-pill">
         <div class="stat-num" id="expiredAutoCount" style="color:#9aa0bc">0</div>
         <div class="stat-label">已自動移除</div>
-      </div>
-      <div class="stat-pill clickable" id="mgmtPill" onclick="toggleAdminPanel()" title="活動方案管理">
-        <div class="stat-icon">⚙️</div>
-        <div class="stat-mgmt-label">活動方案管理</div>
-      </div>
-      <div class="stat-pill clickable" onclick="loadFromSheet(false)" title="立即從試算表重新載入" style="display:flex;align-items:center;gap:6px;padding:8px 14px;">
-        <span style="font-size:14px;">🔄</span>
-        <div>
-          <div class="stat-mgmt-label">同步試算表</div>
-          <div id="sheetStatus" style="font-size:10px;color:var(--text-muted);margin-top:1px;">載入中…</div>
-        </div>
       </div>
     </div>
   </header>
@@ -694,7 +759,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">channel</td><td style="padding:7px 12px;border:1px solid var(--border);">通路分類</td><td style="padding:7px 12px;border:1px solid var(--border);">傳統通路 / 特販通路 / 量販通路 / 消費者端</td></tr>
+          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">channel</td><td style="padding:7px 12px;border:1px solid var(--border);">通路分類（可多選，用 | 分隔）</td><td style="padding:7px 12px;border:1px solid var(--border);">傳統通路 / CVS通路 / 特販超市 / 量販通路 / 餐飲通路 / 拓展通路 / 消費者端</td></tr>
+          <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#10b981;font-weight:700;">type</td><td style="padding:7px 12px;border:1px solid var(--border);">🆕 活動類型（決定卡片分組）</td><td style="padding:7px 12px;border:1px solid var(--border);">產品促銷 / 陳列活動 / 其他</td></tr>
+          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#10b981;font-weight:700;">audience</td><td style="padding:7px 12px;border:1px solid var(--border);">🆕 對象端（上方篩選用）</td><td style="padding:7px 12px;border:1px solid var(--border);">客戶端 / 消費者端</td></tr>
           <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">product</td><td style="padding:7px 12px;border:1px solid var(--border);">品項分類</td><td style="padding:7px 12px;border:1px solid var(--border);">啤酒 / 烈酒 / 菸 / 泡麵 / 其他</td></tr>
           <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">mixable</td><td style="padding:7px 12px;border:1px solid var(--border);">是否可混搭</td><td style="padding:7px 12px;border:1px solid var(--border);">是 / 否</td></tr>
           <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#10b981;font-weight:700;">dmImageUrl</td><td style="padding:7px 12px;border:1px solid var(--border);">🆕 DM 圖片（Google Drive 連結），多張用 | 分隔</td><td style="padding:7px 12px;border:1px solid var(--border);color:var(--text-muted);">貼入分享連結即可</td></tr>
@@ -731,17 +798,32 @@
 
   </div>
 
-  <div class="filter-section">
-    <span class="filter-label">通路</span>
-    <div class="filter-group">
-      <button class="filter-chip active" data-filter="channel" data-value="all" onclick="setFilter('channel','all',this)">全部</button>
-      <button class="filter-chip" data-filter="channel" data-value="traditional" onclick="setFilter('channel','traditional',this)">傳統通路</button>
-      <button class="filter-chip" data-filter="channel" data-value="special" onclick="setFilter('channel','special',this)">特販通路</button>
-      <button class="filter-chip" data-filter="channel" data-value="bulk" onclick="setFilter('channel','bulk',this)">量販通路</button>
-      <button class="filter-chip" data-filter="channel" data-value="customer" onclick="setFilter('channel','customer',this)">消費者端</button>
-      <button class="filter-chip" data-filter="channel" data-value="restaurant" onclick="setFilter('channel','restaurant',this)">餐飲通路</button>
+  <!-- CHANNEL TABS -->
+  <div class="channel-tabs" id="channelTabs">
+    <button class="channel-tab active" data-filter="channel" data-value="all" onclick="setFilter('channel','all',this)">全部通路</button>
+    <button class="channel-tab" data-filter="channel" data-value="traditional" onclick="setFilter('channel','traditional',this)">傳統通路</button>
+    <button class="channel-tab" data-filter="channel" data-value="cvs" onclick="setFilter('channel','cvs',this)">CVS通路</button>
+    <button class="channel-tab" data-filter="channel" data-value="special" onclick="setFilter('channel','special',this)">特販超市</button>
+    <button class="channel-tab" data-filter="channel" data-value="bulk" onclick="setFilter('channel','bulk',this)">量販通路</button>
+    <button class="channel-tab" data-filter="channel" data-value="restaurant" onclick="setFilter('channel','restaurant',this)">餐飲通路</button>
+    <button class="channel-tab" data-filter="channel" data-value="expand" onclick="setFilter('channel','expand',this)">拓展通路</button>
+  </div>
+
+  <!-- SUMMARY BAR -->
+  <div class="summary-bar">
+    <div class="summary-heading">
+      <span class="summary-title">進行中活動</span>
+      <span class="summary-breakdown" id="summaryBreakdown"></span>
     </div>
-    <div class="filter-divider"></div>
+    <div class="audience-filter">
+      <button class="audience-chip active" data-filter="audience" data-value="all" onclick="setFilter('audience','all',this)">全部顯示</button>
+      <button class="audience-chip" data-filter="audience" data-value="trade" onclick="setFilter('audience','trade',this)">客戶端</button>
+      <button class="audience-chip" data-filter="audience" data-value="customer" onclick="setFilter('audience','customer',this)">消費者端</button>
+    </div>
+  </div>
+
+  <!-- PRODUCT FILTER -->
+  <div class="filter-section">
     <span class="filter-label">品項</span>
     <div class="filter-group">
       <button class="filter-chip active" data-filter="product" data-value="all" onclick="setFilter('product','all',this)">全部</button>
@@ -1042,7 +1124,7 @@ document.addEventListener('keydown', e => {
 });
 
 let promos = [];
-let filters = { channel: 'all', product: 'all' };
+let filters = { channel: 'all', product: 'all', audience: 'all' };
 let removedCount = 0;
 let pendingImages = [];
 
@@ -1101,7 +1183,15 @@ function parseCSV(text) {
     };
 
     const channelRaw = get('channel') || 'traditional';
-    const channelMap = { '傳統通路':'traditional', 'traditional':'traditional', '特販通路':'special', 'special':'special', '量販通路':'bulk', 'bulk':'bulk', '消費者端':'customer', 'customer':'customer', '餐飲通路':'restaurant', 'restaurant':'restaurant' };
+    const channelMap = {
+      '傳統通路':'traditional', 'traditional':'traditional',
+      'CVS通路':'cvs', 'CVS':'cvs', 'cvs':'cvs', '超商通路':'cvs', '便利商店':'cvs',
+      '特販通路':'special', '特販超市':'special', '特販':'special', 'special':'special',
+      '量販通路':'bulk', 'bulk':'bulk',
+      '消費者端':'customer', 'customer':'customer',
+      '餐飲通路':'restaurant', 'restaurant':'restaurant',
+      '拓展通路':'expand', 'expand':'expand'
+    };
     const splitMulti = (str) => str.split(/[|,]/).map(s => s.trim()).filter(Boolean);
     const channels = (() => { const arr = splitMulti(channelRaw).map(c => channelMap[c]).filter(Boolean); return arr.length ? arr : ['traditional']; })();
 
@@ -1119,6 +1209,16 @@ function parseCSV(text) {
       startDateText: (!parseSheetDate(get('startDate')) && get('startDate')) ? get('startDate') : null,
       endDateText:   (!parseSheetDate(get('endDate'))   && get('endDate'))   ? get('endDate')   : null,
       periodOverride: get('periodOverride') || null,
+      activityType: (() => {
+        const t = get('type') || get('activityType') || get('活動類型');
+        const m = { '產品促銷':'product','product':'product','陳列活動':'display','display':'display','其他':'other','other':'other' };
+        return m[t] || null;
+      })(),
+      audience: (() => {
+        const a = get('audience') || get('對象端');
+        const m = { '客戶端':'trade','trade':'trade','消費者端':'customer','customer':'customer' };
+        return m[a] || null;
+      })(),
       target: get('target'),
       itemsList: getArr('itemsList'),
       items: get('itemsList'),
@@ -1157,12 +1257,20 @@ function loadFromSheet() {
     if (overlay) overlay.style.display = 'none';
     cleanExpired();
     render();
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const el = document.getElementById('lastSyncText');
+    if (el) el.textContent = `LAST SYNC: ${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const dot = document.getElementById('syncDot');
+    if (dot) dot.classList.add('ok');
     showToast('✅ 已從試算表載入 ' + sheetPromos.length + ' 筆活動');
   }
 
   function onError(err) {
     console.error('載入失敗:', err);
     if (overlay) overlay.style.display = 'none';
+    const dot = document.getElementById('syncDot');
+    if (dot) dot.classList.remove('ok');
     showToast('⚠️ 試算表載入失敗，請重新整理');
   }
 
@@ -1481,6 +1589,7 @@ function getFiltered() {
   return promos.filter(p => {
     if (filters.channel !== 'all' && !p.channels.includes(filters.channel)) return false;
     if (filters.product !== 'all' && !p.products.includes(filters.product)) return false;
+    if (filters.audience !== 'all' && getAudience(p) !== filters.audience) return false;
     return true;
   });
 }
@@ -1515,11 +1624,33 @@ function formatDate(d) {
 
 const CHANNELS = [
   { key: 'traditional', name: '傳統通路', dotCls: 'dot-trad' },
-  { key: 'special',     name: '特販通路', dotCls: 'dot-special' },
+  { key: 'cvs',         name: 'CVS通路', dotCls: 'dot-special' },
+  { key: 'special',     name: '特販超市', dotCls: 'dot-special' },
   { key: 'bulk',        name: '量販通路', dotCls: 'dot-bulk' },
-{ key: 'customer', name: '消費者端', dotCls: 'dot-trad' },
-  { key: 'restaurant', name: '餐飲通路', dotCls: 'dot-restaurant' },	
+  { key: 'restaurant',  name: '餐飲通路', dotCls: 'dot-restaurant' },
+  { key: 'expand',      name: '拓展通路', dotCls: 'dot-bulk' },
+  { key: 'customer',    name: '消費者端', dotCls: 'dot-trad' },
 ];
+
+// 活動類型（對應截圖的「產品促銷 / 陳列活動 / 其他」）
+const ACTIVITY_TYPES = [
+  { key: 'product', name: '產品促銷' },
+  { key: 'display', name: '陳列活動' },
+  { key: 'other',   name: '其他' },
+];
+function getActivityType(p) {
+  if (p.activityType && ACTIVITY_TYPES.some(t => t.key === p.activityType)) return p.activityType;
+  const txt = [p.title, p.target, (p.itemsList||[]).join(''), (p.promoMethods||[]).join(''), (p.bonuses||[]).join(''), p.notes||''].join('');
+  if (/陳列|排面|堆頭|端架|冰櫃|專區/.test(txt)) return 'display';
+  if (/折扣|折讓|進貨|搭贈|加碼|促銷/.test(txt)) return 'product';
+  return 'other';
+}
+function getAudience(p) {
+  if (p.audience === 'customer' || p.audience === 'trade') return p.audience;
+  if ((p.channels||[]).includes('customer')) return 'customer';
+  if ((p.consumerActivities||[]).length && !(p.promoMethods||[]).length && !(p.bonuses||[]).length) return 'customer';
+  return 'trade';
+}
 
 const PRODUCT_MAP = {
   beer:   { label: '啤酒', cls: 'tag-beer',   cardCls: 'product-beer' },
@@ -1534,32 +1665,40 @@ function render() {
   const filtered = getFiltered();
   const content = document.getElementById('mainContent');
   const active = promos.filter(p => !p.endDate || new Date(p.endDate) >= new Date());
-  document.getElementById('totalCount').textContent = promos.length;
-  document.getElementById('activeCount').textContent = active.length;
-  document.getElementById('expiredAutoCount').textContent = removedCount;
+  const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  setTxt('totalCount', promos.length);
+  setTxt('activeCount', active.length);
+  setTxt('expiredAutoCount', removedCount);
+  updateSummary();
 
   if (!filtered.length) {
     content.innerHTML = `<div class="empty-state"><div class="empty-icon">📂</div><div class="empty-title">${promos.length===0?'尚無活動資料':'無符合篩選條件的活動'}</div><div class="empty-sub">${promos.length===0?'請貼入活動方案文字，系統將自動分類整理<br>可同時附加活動 DM，到期活動會自動隱藏':'請調整篩選條件'}</div></div>`;
     return;
   }
 
-  const channelsToShow = filters.channel === 'all'
-    ? CHANNELS.filter(ch => filtered.some(p => p.channels.includes(ch.key)))
-    : CHANNELS.filter(ch => ch.key === filters.channel);
-
-  content.innerHTML = channelsToShow.map(ch => {
-    const chPromos = filtered.filter(p => p.channels.includes(ch.key));
-    if (!chPromos.length) return '';
-    return `<div class="channel-section">
-      <div class="channel-header">
-        <span class="channel-dot ${ch.dotCls}"></span>
-        <span class="channel-name">${ch.name}</span>
-        <span class="channel-line"></span>
-        <span class="channel-count">${chPromos.length} 個活動</span>
+  content.innerHTML = ACTIVITY_TYPES.map(t => {
+    const tPromos = filtered.filter(p => getActivityType(p) === t.key);
+    if (!tPromos.length) return '';
+    return `<div class="type-section">
+      <div class="type-header">
+        <span class="type-name">${t.name}</span>
+        <span class="type-dotted-line"></span>
       </div>
-      <div class="cards-grid">${chPromos.map(renderCard).join('')}</div>
+      <div class="cards-grid">${tPromos.map(renderCard).join('')}</div>
     </div>`;
   }).join('');
+}
+
+// 更新上方「進行中活動 / 產品促銷 x 陳列活動 y 其他 z」統計
+function updateSummary() {
+  const filtered = getFiltered();
+  const el = document.getElementById('summaryBreakdown');
+  if (!el) return;
+  const parts = ACTIVITY_TYPES.map(t => {
+    const n = filtered.filter(p => getActivityType(p) === t.key).length;
+    return `${t.name} <b>${n}</b>`;
+  });
+  el.innerHTML = parts.join('<span class="sep">·</span>');
 }
 
 function renderCard(p) {
@@ -1683,44 +1822,42 @@ function renderCard(p) {
   const cardFontScale = totalTextLen > 700 ? 'card-text-xs'
                       : totalTextLen > 400 ? 'card-text-sm'
                       : '';
-  return `<div class="promo-card ${cardCls} ${cardFontScale} ${isExpired?'expired':''}" id="card-${p.id}">
+  // ── 海報式卡片 ──
+  const heroImg = (p.images && p.images.length) ? p.images[0] : null;
+  const shortDate = (d, txt) => {
+    if (!d) return txt || '';
+    const dt = new Date(d);
+    return `${dt.getFullYear()}/${dt.getMonth()+1}/${dt.getDate()}`;
+  };
+  const dateLine = p.periodOverride || (() => {
+    const s = shortDate(p.startDate, p.startDateText);
+    const e = shortDate(p.endDate, p.endDateText);
+    if (s && e) return `${s} — ${e}`;
+    if (!s && e) return `即日起 — ${e}`;
+    if (s && !e) return `${s} 起`;
+    return '無期限';
+  })();
+  const statusOn = !isExpired;
+
+  return `<div class="promo-card poster ${cardCls} ${isExpired?'expired':''}" id="card-${p.id}">
     <div class="card-stripe"></div>
-    <div class="card-body">
 
-      <!-- 標題列 -->
-      <div class="card-header-row">
-        <div class="card-title">${titleDisplay}</div>
-        <div class="card-btns">${dmButtons}</div>
-      </div>
+    <div class="poster-hero" style="${heroImg?`background-image:url('${heroImg}')`:''}" onclick="${heroImg?`openModalByPromo('${p.id}')`:`openPromoPopup('${p.id}')`}">
+      ${heroImg ? '' : '<span class="poster-hero-fallback">🖼️</span>'}
+      ${cd.text !== '無期限' ? `<span class="poster-countdown ${cd.cls}">${cd.text}</span>` : ''}
+    </div>
 
-      <!-- 品項 tags -->
+    <div class="poster-body">
+      <div class="poster-date">🗓 ${dateLine}</div>
+      <div class="poster-title" onclick="openPromoPopup('${p.id}')">${titleDisplay}</div>
       <div class="tags-row">${tagHtml}</div>
 
-      <!-- 資訊區（日期＋對象合一區塊） -->
-      <div class="card-meta-zone">
-        <div class="meta-row">
-          <span class="meta-icon">📅</span>
-          <span class="period-text">${periodText}</span>
-          ${cd.text !== '無期限' ? `<span class="countdown ${cd.cls}">${cd.text}</span>` : ''}
+      <div class="poster-footer">
+        <span class="poster-status ${statusOn?'status-on':''}"><span class="status-dot"></span>${statusOn?'ACTIVE':'ENDED'}</span>
+        <div class="poster-actions">
+          <button class="poster-details-btn" onclick="openPromoPopup('${p.id}')">DETAILS ${p.images?.length?`📎 附圖`:''} ›</button>
         </div>
-        ${p.target ? `<div class="meta-row">
-          <span class="meta-icon">🎯</span>
-          <span class="meta-label">對象</span>
-          <span class="meta-val">${p.target}</span>
-        </div>` : ''}
       </div>
-
-      <!-- 活動品項 -->
-      ${itemsHtml ? `<div class="items-zone">
-        <div class="zone-header">
-          📦 活動品項
-          ${p.mixable ? `<span class="tag-mixable">可混搭</span>` : ''}
-        </div>
-        <div class="items-list">${itemsHtml}</div>
-      </div>` : ''}
-
-      <!-- 促銷重點 -->
-      ${highlightHtml}
 
       <!-- 編輯面板 -->
       <div class="card-edit-panel" id="editpanel-${p.id}">
