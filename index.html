@@ -886,8 +886,21 @@ function switchTab(tab) {
   if (tab === 'month') renderMonth();
 }
 
+function getMinMonthOffset() {
+  const now = new Date();
+  let min = -1; // 預設只到上個月
+  promos.forEach(p => {
+    if (!p.startDate) return;
+    const s = new Date(p.startDate);
+    const off = (s.getFullYear() - now.getFullYear()) * 12 + (s.getMonth() - now.getMonth());
+    if (off < min) min = off; // 活動涉及更早的月份也要看得到
+  });
+  return min;
+}
 function changeMonth(delta) {
-  currentMonthOffset += delta;
+  const next = currentMonthOffset + delta;
+  if (next < getMinMonthOffset()) return;
+  currentMonthOffset = next;
   renderMonth();
 }
 
@@ -895,6 +908,9 @@ function goToday() { currentMonthOffset = 0; renderMonth(); }
 
 function renderMonth() {
   const now = new Date();
+  if (currentMonthOffset < getMinMonthOffset()) currentMonthOffset = getMinMonthOffset();
+  const prevBtn = document.querySelector('#monthView .month-nav-btn');
+  if (prevBtn) { const dis = currentMonthOffset <= getMinMonthOffset(); prevBtn.disabled = dis; prevBtn.style.opacity = dis ? '0.35' : '1'; prevBtn.style.cursor = dis ? 'not-allowed' : 'pointer'; }
   const target = new Date(now.getFullYear(), now.getMonth() + currentMonthOffset, 1);
   const year  = target.getFullYear();
   const month = target.getMonth();
@@ -1153,16 +1169,25 @@ function parseCSV(text) {
     return result;
   }
 
-  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const lines = text.trim().split('\n').filter(l => l.trim());
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/^\uFEFF/, '');
+  // 依引號狀態切割「記錄」，儲存格內的換行不會被當成新的一列
+  const records = [];
+  { let cur = '', inQ = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (c === '"') { if (inQ && text[i+1] === '"') { cur += '""'; i++; } else { inQ = !inQ; cur += c; } }
+      else if (c === '\n' && !inQ) { records.push(cur); cur = ''; }
+      else cur += c;
+    }
+    if (cur.trim()) records.push(cur);
+  }
+  const lines = records.filter(l => l.replace(/[,\s"]/g, '') !== '');
   if (lines.length < 2) return [];
   const headers = parseAllCols(lines[0]).map(h => h.replace(/^"|"$/g, '').replace(/\r/g,'').trim());
-  console.log('[CSV] headers:', headers);
 
   return lines.slice(1).map((line, idx) => {
     if (!line.trim()) return null;
     const cols = parseAllCols(line);
-    console.log('[CSV] row'+(idx+2)+':', cols);
 
     const get = (key) => {
       const keyLower = key.toLowerCase();
@@ -1170,7 +1195,7 @@ function parseCSV(text) {
       if (i < 0 || i >= cols.length) return '';
       return cols[i].replace(/^"+|"+$/g, '').replace(/\r/g,'').trim();
     };
-    const getArr = (key) => get(key).split('|').map(s=>s.trim()).filter(Boolean);
+    const getArr = (key) => get(key).split(/[|\n]/).map(s=>s.trim()).filter(Boolean);
 
     const parseSheetDate = (str) => {
       if (!str) return null;
@@ -1201,7 +1226,7 @@ function parseCSV(text) {
 
     return {
       id: get('id') || `sheet_${idx}`,
-      title: get('title') || `活動 ${idx+1}`,
+      title: get('title'),
       channels,
       products,
       startDate: parseSheetDate(get('startDate')),
@@ -1242,7 +1267,7 @@ function parseCSV(text) {
       createdAt: new Date().toISOString(),
       fromSheet: true
     };
-  }).filter(p => p && p.title);
+  }).filter(p => p && p.title && p.title.trim());
 }
 
 function loadFromSheet() {
@@ -1845,13 +1870,12 @@ function renderCard(p) {
   return `<div class="promo-card poster ${cardCls} ${isExpired?'expired':''}" id="card-${p.id}">
     <div class="card-stripe"></div>
 
-    <div class="poster-hero" style="${heroImg?`background-image:url('${heroImg}')`:''}" onclick="${heroImg?`openModalByPromo('${p.id}')`:`openPromoPopup('${p.id}')`}">
-      ${heroImg ? '' : '<span class="poster-hero-fallback">🖼️</span>'}
+    ${heroImg ? `<div class="poster-hero" style="background-image:url('${heroImg}')" onclick="openModalByPromo('${p.id}')">
       ${cd.text !== '無期限' ? `<span class="poster-countdown ${cd.cls}">${cd.text}</span>` : ''}
-    </div>
+    </div>` : ''}
 
     <div class="poster-body">
-      <div class="poster-date">🗓 ${dateLine}</div>
+      <div class="poster-date">🗓 ${dateLine}${(!heroImg && cd.text !== '無期限') ? `<span class="countdown ${cd.cls}">${cd.text}</span>` : ''}</div>
       <div class="poster-title" onclick="openPromoPopup('${p.id}')">${titleDisplay}</div>
       <div class="tags-row">${tagHtml}</div>
 
