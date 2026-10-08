@@ -759,9 +759,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">channel</td><td style="padding:7px 12px;border:1px solid var(--border);">通路分類（可多選，用 | 分隔）</td><td style="padding:7px 12px;border:1px solid var(--border);">傳統通路 / CVS通路 / 特販超市 / 量販通路 / 餐飲通路 / 拓展通路 / 消費者端</td></tr>
+          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">channel</td><td style="padding:7px 12px;border:1px solid var(--border);">通路分類（可多選，用 | 分隔）</td><td style="padding:7px 12px;border:1px solid var(--border);">傳統通路 / CVS通路 / 特販超市 / 量販通路 / 餐飲通路</td></tr>
           <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#10b981;font-weight:700;">type</td><td style="padding:7px 12px;border:1px solid var(--border);">🆕 活動類型（決定卡片分組）</td><td style="padding:7px 12px;border:1px solid var(--border);">產品促銷 / 陳列活動 / 其他</td></tr>
-          <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#10b981;font-weight:700;">audience</td><td style="padding:7px 12px;border:1px solid var(--border);">🆕 對象端（上方篩選用）</td><td style="padding:7px 12px;border:1px solid var(--border);">客戶端 / 消費者端</td></tr>
+          
           <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">product</td><td style="padding:7px 12px;border:1px solid var(--border);">品項分類</td><td style="padding:7px 12px;border:1px solid var(--border);">啤酒 / 烈酒 / 菸 / 泡麵 / 其他</td></tr>
           <tr><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#4f7cff;">mixable</td><td style="padding:7px 12px;border:1px solid var(--border);">是否可混搭</td><td style="padding:7px 12px;border:1px solid var(--border);">是 / 否</td></tr>
           <tr style="background:#fafbff;"><td style="padding:7px 12px;border:1px solid var(--border);font-family:monospace;color:#10b981;font-weight:700;">dmImageUrl</td><td style="padding:7px 12px;border:1px solid var(--border);">🆕 DM 圖片（Google Drive 連結），多張用 | 分隔</td><td style="padding:7px 12px;border:1px solid var(--border);color:var(--text-muted);">貼入分享連結即可</td></tr>
@@ -806,7 +806,6 @@
     <button class="channel-tab" data-filter="channel" data-value="special" onclick="setFilter('channel','special',this)">特販超市</button>
     <button class="channel-tab" data-filter="channel" data-value="bulk" onclick="setFilter('channel','bulk',this)">量販通路</button>
     <button class="channel-tab" data-filter="channel" data-value="restaurant" onclick="setFilter('channel','restaurant',this)">餐飲通路</button>
-    <button class="channel-tab" data-filter="channel" data-value="expand" onclick="setFilter('channel','expand',this)">拓展通路</button>
   </div>
 
   <!-- SUMMARY BAR -->
@@ -1214,8 +1213,7 @@ function parseCSV(text) {
       '特販通路':'special', '特販超市':'special', '特販':'special', 'special':'special',
       '量販通路':'bulk', 'bulk':'bulk',
       '消費者端':'customer', 'customer':'customer',
-      '餐飲通路':'restaurant', 'restaurant':'restaurant',
-      '拓展通路':'expand', 'expand':'expand'
+      '餐飲通路':'restaurant', 'restaurant':'restaurant'
     };
     const splitMulti = (str) => str.split(/[|,]/).map(s => s.trim()).filter(Boolean);
     const channels = (() => { const arr = splitMulti(channelRaw).map(c => channelMap[c]).filter(Boolean); return arr.length ? arr : ['traditional']; })();
@@ -1238,11 +1236,6 @@ function parseCSV(text) {
         const t = get('type') || get('activityType') || get('活動類型');
         const m = { '產品促銷':'product','product':'product','陳列活動':'display','display':'display','其他':'other','other':'other' };
         return m[t] || null;
-      })(),
-      audience: (() => {
-        const a = get('audience') || get('對象端');
-        const m = { '客戶端':'trade','trade':'trade','消費者端':'customer','customer':'customer' };
-        return m[a] || null;
       })(),
       target: get('target'),
       itemsList: getArr('itemsList'),
@@ -1617,7 +1610,7 @@ function getFiltered() {
   return promos.filter(p => {
     if (filters.channel !== 'all' && !p.channels.includes(filters.channel)) return false;
     if (filters.product !== 'all' && !p.products.includes(filters.product)) return false;
-    if (filters.audience !== 'all' && getAudience(p) !== filters.audience) return false;
+    if (filters.audience !== 'all' && !audienceMatch(p, filters.audience)) return false;
     return true;
   });
 }
@@ -1656,7 +1649,6 @@ const CHANNELS = [
   { key: 'special',     name: '特販超市', dotCls: 'dot-special' },
   { key: 'bulk',        name: '量販通路', dotCls: 'dot-bulk' },
   { key: 'restaurant',  name: '餐飲通路', dotCls: 'dot-restaurant' },
-  { key: 'expand',      name: '拓展通路', dotCls: 'dot-bulk' },
   { key: 'customer',    name: '消費者端', dotCls: 'dot-trad' },
 ];
 
@@ -1673,11 +1665,15 @@ function getActivityType(p) {
   if (/折扣|折讓|進貨|搭贈|加碼|促銷/.test(txt)) return 'product';
   return 'other';
 }
-function getAudience(p) {
-  if (p.audience === 'customer' || p.audience === 'trade') return p.audience;
-  if ((p.channels||[]).includes('customer')) return 'customer';
-  if ((p.consumerActivities||[]).length && !(p.promoMethods||[]).length && !(p.bonuses||[]).length) return 'customer';
-  return 'trade';
+// 客戶端／消費者端：依試算表 G 欄 target 的文字判斷（可同時包含兩者）
+function audienceMatch(p, val) {
+  const t = (p.target || '');
+  const hasConsumer = /消費者/.test(t);
+  const hasTrade = /客戶/.test(t);
+  if (hasConsumer || hasTrade) return val === 'customer' ? hasConsumer : hasTrade;
+  // target 沒寫明時的備援
+  if ((p.channels||[]).includes('customer')) return val === 'customer';
+  return val === 'trade';
 }
 
 const PRODUCT_MAP = {
